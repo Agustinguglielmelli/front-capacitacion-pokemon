@@ -1,0 +1,10 @@
+export interface Pokemon {
+    id: number;
+    name: string;
+    type: string;
+    height: number;
+    weight: number;
+    imageUrl: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
