@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./card"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../shadcn/card.tsx"
 
 type PokemonCardProps = {
     name: string
