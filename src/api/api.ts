@@ -18,3 +18,13 @@ export async function getPaginatedPokemons(params: GetPaginatedPokemonsParams = 
     const response = await fetch(`${API_URL}/pokemons/paginated?${query.toString()}`);
     return response.json();
 }
+
+export function createNewPokemon(pokemon: Pokemon) {
+    return fetch(`${API_URL}/pokemons`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(pokemon),
+    }).then(response => response.json());
+}

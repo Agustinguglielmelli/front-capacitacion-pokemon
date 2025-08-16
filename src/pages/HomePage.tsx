@@ -12,6 +12,8 @@ import type { Pokemon } from "@/types/Pokemon";
 import {usePaginatedPokemons} from "@/hooks/usePaginatedPokemons.ts";
 import {PokemonFiltersForm} from "@/components/custom/PokemonFiltersForm.tsx";
 import {PokemonGrid} from "@/components/custom/PokemonsGrid.tsx";
+import {Button} from "@/components/shadcn/button.tsx";
+import {AddNewPokemonModal} from "@/components/custom/AddNewPokemonModal.tsx";
 
 export function HomePage() {
     const [page, setPage] = useState(1);
@@ -21,6 +23,12 @@ export function HomePage() {
 
     const { data, refetch, isFetching } = usePaginatedPokemons({ page, limit, search, type: typeFilter });
     const pokemons: Pokemon[] = data?.data || [];
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
 
     const handlePrev = () => {
         if (page > 1) setPage((prev) => prev - 1);
@@ -38,34 +46,41 @@ export function HomePage() {
 
     return (
         <div className="mx-auto flex flex-col items-center h-screen bg-red-500 py-4">
-            <Header />
-            <PokemonFiltersForm
-                search={search}
-                typeFilter={typeFilter}
-                setSearch={setSearch}
-                setTypeFilter={setTypeFilter}
-                onSearch={handleSearch}
-            />
+            <Header/>
 
-            <PokemonGrid pokemons={pokemons} />
+            <div className="flex space-x-4 items-center justify-center mb-4">
+                <Button onClick={openModal}> Add new Pokemon </Button>
+                <AddNewPokemonModal isOpen={isModalOpen} onClose={closeModal} />
+                <PokemonFiltersForm
+                    search={search}
+                    typeFilter={typeFilter}
+                    setSearch={setSearch}
+                    setTypeFilter={setTypeFilter}
+                    onSearch={handleSearch}
+                />
+            </div>
 
-            {isFetching && <div className="mt-2 text-white">Cargando...</div>}
+                <PokemonGrid pokemons={pokemons}/>
 
-            <Pagination className="my-4">
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious className="cursor-pointer" onClick={handlePrev} aria-disabled={page === 1} />
-                    </PaginationItem>
+                {isFetching && <div className="mt-2 text-white">Cargando...</div>}
 
-                    <PaginationItem>
-                        <PaginationLink isActive>{page}</PaginationLink>
-                    </PaginationItem>
+                <Pagination className="my-4">
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious className="cursor-pointer" onClick={handlePrev}
+                                                aria-disabled={page === 1}/>
+                        </PaginationItem>
 
-                    <PaginationItem>
-                        <PaginationNext className="cursor-pointer" onClick={handleNext} aria-disabled={data && page >= Math.ceil(data.total / limit)} />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
-        </div>
-    );
-}
+                        <PaginationItem>
+                            <PaginationLink isActive>{page}</PaginationLink>
+                        </PaginationItem>
+
+                        <PaginationItem>
+                            <PaginationNext className="cursor-pointer" onClick={handleNext}
+                                            aria-disabled={data && page >= Math.ceil(data.total / limit)}/>
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+            </div>
+            );
+            }
