@@ -28,3 +28,9 @@ export function createNewPokemon(pokemon: Pokemon) {
         body: JSON.stringify(pokemon),
     }).then(response => response.json());
 }
+
+export function deletePokemon(id: number) {
+    return fetch(`${API_URL}/pokemons/${id}`, {
+        method: 'DELETE',
+    }).then(response => response.json());
+}

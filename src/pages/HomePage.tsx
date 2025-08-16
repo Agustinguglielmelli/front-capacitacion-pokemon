@@ -14,6 +14,7 @@ import {PokemonFiltersForm} from "@/components/custom/PokemonFiltersForm.tsx";
 import {PokemonGrid} from "@/components/custom/PokemonsGrid.tsx";
 import {Button} from "@/components/shadcn/button.tsx";
 import {AddNewPokemonModal} from "@/components/custom/AddNewPokemonModal.tsx";
+import {useDeletePokemon} from "@/hooks/useDeletePokemon.ts";
 
 export function HomePage() {
     const [page, setPage] = useState(1);
@@ -25,6 +26,8 @@ export function HomePage() {
     const pokemons: Pokemon[] = data?.data || [];
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const { deletePokemon} = useDeletePokemon();
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -44,6 +47,12 @@ export function HomePage() {
         refetch();
     };
 
+
+    const handleDelete = (id: number) => {
+        console.log("Deleting pokemon with id:", id);
+        deletePokemon(id);
+    }
+
     return (
         <div className="mx-auto flex flex-col items-center h-screen bg-red-500 py-4">
             <Header/>
@@ -60,7 +69,7 @@ export function HomePage() {
                 />
             </div>
 
-                <PokemonGrid pokemons={pokemons}/>
+                <PokemonGrid pokemons={pokemons} handleDelete= {handleDelete} />
 
                 {isFetching && <div className="mt-2 text-white">Cargando...</div>}
 
