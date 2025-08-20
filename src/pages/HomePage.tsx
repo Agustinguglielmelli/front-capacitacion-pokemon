@@ -15,12 +15,15 @@ import {PokemonGrid} from "@/components/custom/PokemonsGrid.tsx";
 import {Button} from "@/components/shadcn/button.tsx";
 import {AddNewPokemonModal} from "@/components/custom/AddNewPokemonModal.tsx";
 import {useDeletePokemon} from "@/hooks/useDeletePokemon.ts";
+import {useNavigate} from "react-router-dom";
 
 export function HomePage() {
     const [page, setPage] = useState(1);
     const [limit] = useState(12);
     const [search, setSearch] = useState("");
     const [typeFilter, setTypeFilter] = useState("");
+
+    const navigate = useNavigate();
 
     const { data, refetch, isFetching } = usePaginatedPokemons({ page, limit, search, type: typeFilter });
     const pokemons: Pokemon[] = data?.data || [];
@@ -52,6 +55,9 @@ export function HomePage() {
         console.log("Deleting pokemon with id:", id);
         deletePokemon(id);
     }
+    const handleDetails = (id: number) => {
+        navigate(`/pokemons/${id}`);
+    }
 
 
     return (
@@ -70,7 +76,7 @@ export function HomePage() {
                 />
             </div>
 
-                <PokemonGrid pokemons={pokemons} handleDelete= {handleDelete} />
+                <PokemonGrid pokemons={pokemons} handleDelete= {handleDelete} handleDetails={handleDetails} />
 
                 {isFetching && <div className="mt-2 text-white">Cargando...</div>}
 

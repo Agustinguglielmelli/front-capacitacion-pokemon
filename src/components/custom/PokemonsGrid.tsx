@@ -6,9 +6,10 @@ import { useState } from "react";
 interface PokemonGridProps {
     pokemons: Pokemon[];
     handleDelete: (id: number) => void;
+    handleDetails: (id: number) => void;
 }
 
-export function PokemonGrid({ pokemons, handleDelete }: PokemonGridProps) {
+export function PokemonGrid({ pokemons, handleDelete, handleDetails }: PokemonGridProps) {
     const [isEditPokemonModalOpen, setIsEditPokemonModalOpen] = useState(false);
     const [pokemonToEdit, setPokemonToEdit] = useState<Pokemon | null>(null);
 
@@ -34,6 +35,7 @@ export function PokemonGrid({ pokemons, handleDelete }: PokemonGridProps) {
                     weight={pokemon.weight}
                     handleDelete={handleDelete}
                     handleEdit={() => openEditPokemonModal(pokemon)}
+                    handleDetails={handleDetails}
                 />
             ))}
             <EditPokemonModal

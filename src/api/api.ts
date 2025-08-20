@@ -42,3 +42,8 @@ export async function updatePokemon(pokemon: Pokemon) {
         body: JSON.stringify(pokemon),
     }).then(res => res.json());
 }
+
+export async function getPokemonById(id: number): Promise<Pokemon> {
+    const response = await fetch(`${API_URL}/pokemons/${id}`);
+    return response.json();
+}

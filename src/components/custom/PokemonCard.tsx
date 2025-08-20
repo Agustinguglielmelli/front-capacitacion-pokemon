@@ -11,9 +11,10 @@ type PokemonCardProps = {
     weight: number
     handleDelete: (id: number) => void
     handleEdit: (pokemon: Pokemon) => void
+    handleDetails: (id: number) => void
 }
 
-export function PokemonCard({ id, name, type, imageUrl, height, weight, handleDelete, handleEdit }: PokemonCardProps) {
+export function PokemonCard({ id, name, type, imageUrl, height, weight, handleDelete, handleEdit, handleDetails }: PokemonCardProps) {
     return (
         <Card className="group bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 relative">
             {/* Header con número y botones */}
@@ -23,11 +24,11 @@ export function PokemonCard({ id, name, type, imageUrl, height, weight, handleDe
                 </span>
 
                 {/* Botones de acción - aparecen en hover en el header */}
-                <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-1">
+                <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-1 ">
                     <Button
                         size="sm"
                         variant="outline"
-                        className="text-xs h-6 px-2 bg-white hover:bg-gray-100 shadow-sm"
+                        className="text-xs h-6 px-2 bg-white hover:bg-gray-100 shadow-sm cursor-pointer"
                         onClick={() => handleEdit({id, name, type, imageUrl, height, weight})}
                     >
                         Edit
@@ -35,10 +36,18 @@ export function PokemonCard({ id, name, type, imageUrl, height, weight, handleDe
                     <Button
                         size="sm"
                         variant="destructive"
-                        className="text-xs h-6 px-2 shadow-sm"
+                        className="text-xs h-6 px-2 shadow-sm cursor-pointer"
                         onClick={() => handleDelete(id)}
                     >
                         Delete
+                    </Button>
+                    <Button
+                        size="sm"
+                        variant="secondary"
+                        className="text-xs h-6 px-2 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white"
+                        onClick={() => handleDetails(id)}
+                    >
+                        Details
                     </Button>
                 </div>
             </div>
