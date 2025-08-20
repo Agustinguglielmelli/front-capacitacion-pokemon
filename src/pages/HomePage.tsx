@@ -25,12 +25,12 @@ export function HomePage() {
     const { data, refetch, isFetching } = usePaginatedPokemons({ page, limit, search, type: typeFilter });
     const pokemons: Pokemon[] = data?.data || [];
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCreatePokemonModalOpen, setIsCreatePokemonModalOpen] = useState(false);
 
     const { deletePokemon} = useDeletePokemon();
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const openCreatePokemonModal = () => setIsCreatePokemonModalOpen(true);
+    const closeCreatePokemonModal = () => setIsCreatePokemonModalOpen(false);
 
 
     const handlePrev = () => {
@@ -53,13 +53,14 @@ export function HomePage() {
         deletePokemon(id);
     }
 
+
     return (
         <div className="mx-auto flex flex-col items-center h-screen bg-red-500 py-4">
             <Header/>
 
             <div className="flex space-x-4 items-center justify-center mb-4">
-                <Button onClick={openModal}> Add new Pokemon </Button>
-                <AddNewPokemonModal isOpen={isModalOpen} onClose={closeModal} />
+                <Button variant="secondary" onClick={openCreatePokemonModal}> Add new Pokemon </Button>
+                <AddNewPokemonModal isOpen={isCreatePokemonModalOpen} onClose={closeCreatePokemonModal} />
                 <PokemonFiltersForm
                     search={search}
                     typeFilter={typeFilter}
@@ -91,5 +92,5 @@ export function HomePage() {
                     </PaginationContent>
                 </Pagination>
             </div>
-            );
-            }
+    );
+}

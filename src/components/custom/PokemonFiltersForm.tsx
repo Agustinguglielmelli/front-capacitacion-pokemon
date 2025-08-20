@@ -1,4 +1,4 @@
-import {Button} from "@/components/shadcn/button.tsx";
+import {Input} from "@/components/shadcn/input.tsx";
 
 interface PokemonFiltersProps {
     search: string;
@@ -11,23 +11,20 @@ interface PokemonFiltersProps {
 export function PokemonFiltersForm({ search, typeFilter, setSearch, setTypeFilter, onSearch }: PokemonFiltersProps) {
     return (
             <form onSubmit={onSearch} className="flex gap-2 mb-4">
-                <input
+                <Input
                     type="text"
                     placeholder="Buscar por nombre"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="px-2 py-1 rounded border border-gray-300"
+                    className="px-2 py-1 rounded border bg-white text-black"
                 />
-                <input
+                <Input
                     type="text"
                     placeholder="Filtrar por tipo"
                     value={typeFilter}
                     onChange={(e) => setTypeFilter(e.target.value)}
-                    className="px-2 py-1 rounded border border-gray-300"
+                    className="px-2 py-1 rounded border bg-white text-black"
                 />
-                <Button type="submit" className="px-3 py-1  rounded border cursor-pointer">
-                    Buscar
-                </Button>
             </form>
     );
 }

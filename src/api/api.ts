@@ -34,3 +34,11 @@ export function deletePokemon(id: number) {
         method: 'DELETE',
     }).then(response => response.json());
 }
+
+export async function updatePokemon(pokemon: Pokemon) {
+    return fetch(`http://localhost:3000/pokemons/${pokemon.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pokemon),
+    }).then(res => res.json());
+}
