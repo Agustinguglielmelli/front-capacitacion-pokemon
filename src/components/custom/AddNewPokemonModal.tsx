@@ -38,7 +38,7 @@ export function AddNewPokemonModal({ isOpen, onClose }: { isOpen: boolean; onClo
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed z-50 inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-white p-4 rounded">
                 <button onClick={onClose}>Cerrar</button>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-2">
