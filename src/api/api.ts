@@ -15,24 +15,26 @@ export async function getPaginatedPokemons(params: GetPaginatedPokemonsParams = 
     if (params.search) query.append('search', params.search);
     if (params.type) query.append('type', params.type);
 
-    const response = await fetch(`${API_URL}/pokemons/paginated?${query.toString()}`);
+    const response = await fetch(`${API_URL}/pokemons/?${query.toString()}`);
     return response.json();
 }
 
-export function createNewPokemon(pokemon: Pokemon) {
-    return fetch(`${API_URL}/pokemons`, {
+export async function createNewPokemon(pokemon: Pokemon) {
+    const response = await fetch(`${API_URL}/pokemons`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(pokemon),
-    }).then(response => response.json());
+    });
+    return await response.json();
 }
 
-export function deletePokemon(id: number) {
-    return fetch(`${API_URL}/pokemons/${id}`, {
+export async function deletePokemon(id: string) {
+    const response = await fetch(`${API_URL}/pokemons/${id}`, {
         method: 'DELETE',
-    }).then(response => response.json());
+    });
+    return await response.json();
 }
 
 export async function updatePokemon(pokemon: Pokemon) {
@@ -43,7 +45,7 @@ export async function updatePokemon(pokemon: Pokemon) {
     }).then(res => res.json());
 }
 
-export async function getPokemonById(id: number): Promise<Pokemon> {
+export async function getPokemonById(id: string): Promise<Pokemon> {
     const response = await fetch(`${API_URL}/pokemons/${id}`);
     return response.json();
 }

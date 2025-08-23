@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updatePokemon } from "@/api/api.ts";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogTitle,
+} from "@radix-ui/react-dialog";
+import { DialogFooter, DialogHeader } from "@/components/shadcn/dialog.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Label } from "@radix-ui/react-label";
+import { Input } from "@/components/shadcn/input.tsx";
 import type { Pokemon } from "@/types/Pokemon.ts";
-import { Button } from "@/components/shadcn/button.tsx";
-import {updatePokemon} from "@/api/api.ts";
-
-
 
 export function EditPokemonModal({ isOpen, onClose, pokemon }: { isOpen: boolean; onClose: () => void; pokemon?: Pokemon }) {
-    const [name, setName] = useState("");
-    const [type, setType] = useState("");
-    const [height, setHeight] = useState(0);
-    const [weight, setWeight] = useState(0);
-    const [imageUrl, setImageUrl] = useState("");
-
     const queryClient = useQueryClient();
 
     const mutation = useMutation({
@@ -21,49 +22,105 @@ export function EditPokemonModal({ isOpen, onClose, pokemon }: { isOpen: boolean
             queryClient.invalidateQueries({ queryKey: ["pokemons"] });
             onClose();
         },
+        onError: (error) => {
+            console.error("Error updating Pokémon:", error);
+        }
     });
 
-    useEffect(() => {
-        if (pokemon) {
-            setName(pokemon.name);
-            setType(pokemon.type);
-            setHeight(pokemon.height);
-            setWeight(pokemon.weight);
-            setImageUrl(pokemon.imageUrl);
-        }
-    }, [pokemon]);
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!pokemon) return;
-        mutation.mutate({
+
+        const formData = new FormData(e.currentTarget);
+
+        const updatedPokemon = {
             ...pokemon,
-            name,
-            type,
-            height,
-            weight,
-            imageUrl,
-        });
+            name: formData.get("name") as string,
+            type: formData.get("type") as string,
+            height: Number(formData.get("height")),
+            weight: Number(formData.get("weight")),
+            imageUrl: formData.get("imageUrl") as string,
+        };
+
+        mutation.mutate(updatedPokemon);
     };
 
-    if (!isOpen || !pokemon) return null;
+    if (!pokemon) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-4 rounded w-80">
-                <button onClick={onClose} className="mb-2">Cerrar</button>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                    <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Nombre" />
-                    <input type="text" value={type} onChange={e => setType(e.target.value)} placeholder="Tipo" />
-                    <input type="number" value={height} onChange={e => setHeight(Number(e.target.value))} placeholder="Altura" />
-                    <input type="number" value={weight} onChange={e => setWeight(Number(e.target.value))} placeholder="Peso" />
-                    <input type="text" value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="URL de imagen" />
-                    <Button type="submit">
-                        Actualizar Pokémon
-                    </Button>
-                    {mutation.error && <span className="text-red-500 text-xs">Error al guardar</span>}
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent className="fixed top-1/2 left-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-6 shadow-lg border">
+                <form onSubmit={handleSubmit}>
+                    <DialogHeader>
+                        <DialogTitle>Edit Pokemon</DialogTitle>
+                        <DialogDescription>
+                            Update the Pokemon information.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid gap-3">
+                            <Label htmlFor="name">Name</Label>
+                            <Input
+                                id="name"
+                                name="name"
+                                defaultValue={pokemon.name}
+                                placeholder="Pokemon name"
+                                required
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <Label htmlFor="type">Type</Label>
+                            <Input
+                                id="type"
+                                name="type"
+                                defaultValue={pokemon.type}
+                                placeholder="Pokemon type"
+                                required
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <Label htmlFor="height">Height</Label>
+                            <Input
+                                id="height"
+                                name="height"
+                                type="number"
+                                defaultValue={pokemon.height}
+                                placeholder="Height"
+                                required
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <Label htmlFor="weight">Weight</Label>
+                            <Input
+                                id="weight"
+                                name="weight"
+                                type="number"
+                                defaultValue={pokemon.weight}
+                                placeholder="Weight"
+                                required
+                            />
+                        </div>
+                        <div className="grid gap-3">
+                            <Label htmlFor="imageUrl">Image URL</Label>
+                            <Input
+                                id="imageUrl"
+                                name="imageUrl"
+                                defaultValue={pokemon.imageUrl}
+                                placeholder="Image URL"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button variant="outline" type="button">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit" disabled={mutation.isPending}>
+                            {mutation.isPending ? "Updating..." : "Update Pokemon"}
+                        </Button>
+                    </DialogFooter>
                 </form>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     );
 }

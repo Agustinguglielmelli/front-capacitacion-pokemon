@@ -12,7 +12,6 @@ import type { Pokemon } from "@/types/Pokemon";
 import {usePaginatedPokemons} from "@/hooks/usePaginatedPokemons.ts";
 import {PokemonFiltersForm} from "@/components/custom/PokemonFiltersForm.tsx";
 import {PokemonGrid} from "@/components/custom/PokemonsGrid.tsx";
-import {Button} from "@/components/shadcn/button.tsx";
 import {AddNewPokemonModal} from "@/components/custom/AddNewPokemonModal.tsx";
 import {useDeletePokemon} from "@/hooks/useDeletePokemon.ts";
 import {useNavigate} from "react-router-dom";
@@ -28,12 +27,9 @@ export function HomePage() {
     const { data, refetch, isFetching } = usePaginatedPokemons({ page, limit, search, type: typeFilter });
     const pokemons: Pokemon[] = data?.data || [];
 
-    const [isCreatePokemonModalOpen, setIsCreatePokemonModalOpen] = useState(false);
 
     const { deletePokemon} = useDeletePokemon();
 
-    const openCreatePokemonModal = () => setIsCreatePokemonModalOpen(true);
-    const closeCreatePokemonModal = () => setIsCreatePokemonModalOpen(false);
 
 
     const handlePrev = () => {
@@ -65,8 +61,7 @@ export function HomePage() {
             <Header/>
 
             <div className="flex space-x-4 items-center justify-center mb-4">
-                <Button variant="secondary" onClick={openCreatePokemonModal}> Add new Pokemon </Button>
-                <AddNewPokemonModal isOpen={isCreatePokemonModalOpen} onClose={closeCreatePokemonModal} />
+                <AddNewPokemonModal/>
                 <PokemonFiltersForm
                     search={search}
                     typeFilter={typeFilter}

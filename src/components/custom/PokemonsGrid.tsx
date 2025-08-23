@@ -5,8 +5,8 @@ import { useState } from "react";
 
 interface PokemonGridProps {
     pokemons: Pokemon[];
-    handleDelete: (id: number) => void;
-    handleDetails: (id: number) => void;
+    handleDelete: (id: string) => void;
+    handleDetails: (id: string) => void;
 }
 
 export function PokemonGrid({ pokemons, handleDelete, handleDetails }: PokemonGridProps) {
