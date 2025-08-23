@@ -8,7 +8,7 @@ import {
     DialogTitle,
 } from "@radix-ui/react-dialog";
 import { DialogFooter, DialogHeader } from "@/components/shadcn/dialog.tsx";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/shadcn/button.tsx";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/shadcn/input.tsx";
 import type { Pokemon } from "@/types/Pokemon.ts";
